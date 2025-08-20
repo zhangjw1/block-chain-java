@@ -107,6 +107,63 @@ compile.bat
 - `GET /api/blockchain/address/{address}/transaction-count` - 查询地址交易数量
 - `GET /api/blockchain/gas-price` - 获取当前Gas价格
 
+#### 钱包管理
+- `POST /api/wallet/create` - 创建新的EOA钱包
+- `POST /api/wallet/import` - 导入EOA钱包（需要私钥）
+- `GET /api/wallet/balance/{address}` - 查询钱包余额
+- `GET /api/wallet/info` - 获取当前钱包信息
+- `POST /api/wallet/load/{address}` - 加载已保存的钱包
+- `GET /api/wallet/status` - 获取钱包状态概览
+- `POST /api/wallet/validate-address` - 验证地址格式
+- `POST /api/wallet/validate-private-key` - 验证私钥格式
+
+### 7. 智能合约
+
+项目包含一个完整的SimpleStorage智能合约示例：
+
+#### Solidity合约 (`src/main/resources/contracts/SimpleStorage.sol`)
+- 基础存储功能（set/get）
+- 所有权管理
+- 事件日志
+- 安全修饰符
+
+#### Java包装类 (`src/main/java/com/blockchain/learning/contracts/SimpleStorage.java`)
+- Web3j生成的合约包装类
+- 完整的方法映射
+- 事件监听支持
+- 部署和加载功能
+
+### 8. API使用示例
+
+#### 创建新的EOA钱包
+```bash
+curl -X POST http://localhost:8080/api/wallet/create
+```
+
+#### 导入钱包
+```bash
+curl -X POST http://localhost:8080/api/wallet/import \
+  -H "Content-Type: application/json" \
+  -d '{"privateKey": "0x4c0883a69102937d6231471b5dbb6204fe5129617082792ae468d01a3f362318"}'
+```
+
+#### 查询钱包余额
+```bash
+curl http://localhost:8080/api/wallet/balance/0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b
+```
+
+#### 获取网络信息
+```bash
+curl http://localhost:8080/api/blockchain/network-info
+```
+
+#### 验证地址格式
+```bash
+curl -X POST http://localhost:8080/api/wallet/validate-address \
+  -H "Content-Type: application/json" \
+  -d '{"address": "0x742d35Cc6634C0532925a3b8D4C9db96c4b4d8b"}'
+```
+
 **注意**: API文档功能暂时禁用，因为Springfox与Spring Boot 2.7.x存在兼容性问题。后续会使用SpringDoc OpenAPI替代。
 
 ## 项目结构
@@ -130,10 +187,11 @@ src/
 ## 主要功能
 
 - ✅ 项目基础结构搭建
-- 🔄 Web3j网络连接配置
-- 📋 区块链数据查询
-- 💰 钱包管理功能
-- 📄 智能合约部署和交互
+- ✅ Web3j网络连接配置
+- ✅ 区块链数据查询
+- ✅ 钱包管理功能
+- ✅ 智能合约创建和包装类
+- 🔄 智能合约部署和交互
 - 🔒 安全配置和私钥管理
 
 ## 学习路径

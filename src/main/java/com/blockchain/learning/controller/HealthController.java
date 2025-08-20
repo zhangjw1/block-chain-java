@@ -29,6 +29,8 @@ public class HealthController {
         
         // API端点列表
         Map<String, String> endpoints = new HashMap<>();
+        
+        // 区块链查询端点
         endpoints.put("networkInfo", "/api/blockchain/network-info");
         endpoints.put("latestBlock", "/api/blockchain/blocks/latest");
         endpoints.put("blockByNumber", "/api/blockchain/blocks/{blockNumber}");
@@ -37,6 +39,16 @@ public class HealthController {
         endpoints.put("balance", "/api/blockchain/balance/{address}");
         endpoints.put("transactionCount", "/api/blockchain/address/{address}/transaction-count");
         endpoints.put("gasPrice", "/api/blockchain/gas-price");
+        
+        // 钱包管理端点
+        endpoints.put("createWallet", "/api/wallet/create");
+        endpoints.put("importWallet", "/api/wallet/import");
+        endpoints.put("walletBalance", "/api/wallet/balance/{address}");
+        endpoints.put("walletInfo", "/api/wallet/info");
+        endpoints.put("loadWallet", "/api/wallet/load/{address}");
+        endpoints.put("walletStatus", "/api/wallet/status");
+        endpoints.put("validateAddress", "/api/wallet/validate-address");
+        endpoints.put("validatePrivateKey", "/api/wallet/validate-private-key");
         
         response.put("endpoints", endpoints);
         return response;

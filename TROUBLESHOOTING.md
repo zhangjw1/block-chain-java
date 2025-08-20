@@ -69,6 +69,22 @@ set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_XXX
    .\mvnw.cmd clean compile
    ```
 
+### 7. Web3j版本兼容性问题
+
+**错误信息**: `TransactionReceipt.getGasLimit()` 或 `getEffectiveGasPrice()` 方法不存在
+
+**解决方案**:
+- 这是Web3j版本差异导致的问题
+- Web3j 4.9.x版本中TransactionReceipt类的API与新版本不同：
+  - 没有`gasLimit`字段
+  - 可能没有`getEffectiveGasPrice()`方法
+- 项目已适配此版本，使用以下替代方案：
+  - 在`calculateTransactionFee()`中使用默认Gas价格（20 Gwei）
+  - 提供重载方法支持自定义Gas价格计算
+  - 通过Gas使用量推断是否Gas用尽
+  - 在实际应用中，可通过Web3Service获取当前Gas价格
+- 如果遇到类似问题，检查Web3j版本兼容性
+
 ## 验证应用是否正常运行
 
 1. **检查应用启动日志**:

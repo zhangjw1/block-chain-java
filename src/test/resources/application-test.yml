@@ -1,0 +1,14 @@
+blockchain:
+  infura:
+    project-id: "test-project-id"
+  network:
+    name: "sepolia"
+    chain-id: 11155111
+  wallet:
+    storage-path: "./test-wallets"
+    encryption-key: "test-encryption-key"
+
+logging:
+  level:
+    com.blockchain.learning: DEBUG
+    org.web3j: WARN

@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: blockchain-learning
+  web:
+    resources:
+      add-mappings: true
+
+blockchain:
+  infura:
+    project-id: "${INFURA_PROJECT_ID:31c8cb15e8b04abdab33cb953b75c014}"
+  network:
+    name: "sepolia"
+    chain-id: 11155111
+    display-name: "Sepolia Testnet"
+  
+  wallet:
+    storage-path: "${WALLET_STORAGE_PATH:./wallets}"
+    encryption-key: "${WALLET_ENCRYPTION_KEY:default-key}"
+  
+  contract:
+    gas-limit: 4700000
+    gas-price: 20000000000
+
+logging:
+  level:
+    org.web3j: INFO
+    com.blockchain.learning: DEBUG
+    root: INFO

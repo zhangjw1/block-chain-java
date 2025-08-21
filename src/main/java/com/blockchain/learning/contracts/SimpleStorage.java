@@ -61,6 +61,14 @@ public class SimpleStorage extends Contract {
         super(BINARY, contractAddress, web3j, transactionManager, gasPrice, gasLimit);
     }
 
+    protected SimpleStorage(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        super(BINARY, contractAddress, web3j, credentials, contractGasProvider);
+    }
+
+    protected SimpleStorage(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
+    }
+
     /**
      * 获取存储的数值
      *
@@ -213,5 +221,31 @@ public class SimpleStorage extends Contract {
      */
     public static SimpleStorage load(String contractAddress, Web3j web3j, TransactionManager transactionManager, BigInteger gasPrice, BigInteger gasLimit) {
         return new SimpleStorage(contractAddress, web3j, transactionManager, gasPrice, gasLimit);
+    }
+
+    /**
+     * 加载已部署的合约（使用ContractGasProvider）
+     *
+     * @param contractAddress 合约地址
+     * @param web3j Web3j实例
+     * @param credentials 调用者凭证
+     * @param contractGasProvider Gas提供者
+     * @return 合约实例
+     */
+    public static SimpleStorage load(String contractAddress, Web3j web3j, Credentials credentials, ContractGasProvider contractGasProvider) {
+        return new SimpleStorage(contractAddress, web3j, credentials, contractGasProvider);
+    }
+
+    /**
+     * 加载已部署的合约（使用TransactionManager与ContractGasProvider）
+     *
+     * @param contractAddress 合约地址
+     * @param web3j Web3j实例
+     * @param transactionManager 交易管理器
+     * @param contractGasProvider Gas提供者
+     * @return 合约实例
+     */
+    public static SimpleStorage load(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
+        return new SimpleStorage(contractAddress, web3j, transactionManager, contractGasProvider);
     }
 }

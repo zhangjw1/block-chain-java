@@ -34,27 +34,14 @@ public class WalletUtils {
      * 验证私钥格式是否正确
      */
     public static boolean isValidPrivateKey(String privateKey) {
-        if (privateKey == null || privateKey.trim().isEmpty()) {
+        if (privateKey == null) {
             return false;
         }
-        
-        try {
-            // 移除0x前缀
-            String cleanPrivateKey = privateKey.startsWith("0x") ? privateKey.substring(2) : privateKey;
-            
-            // 检查长度（64个十六进制字符）
-            if (cleanPrivateKey.length() != 64) {
-                return false;
-            }
-            
-            // 检查是否为有效的十六进制字符
-            Long.parseLong(cleanPrivateKey.substring(0, 32), 16);
-            Long.parseLong(cleanPrivateKey.substring(32), 16);
-            
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+        // 自动去除0x前缀，让方法更健壮
+        if (privateKey.startsWith("0x")) {
+            privateKey = privateKey.substring(2);
         }
+        return privateKey.matches("^[a-fA-F0-9]{64}$");
     }
 
     /**

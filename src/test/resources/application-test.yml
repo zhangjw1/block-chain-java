@@ -1,6 +1,6 @@
 blockchain:
   infura:
-    project-id: "test-project-id"
+    project-id: ""
   network:
     name: "sepolia"
     chain-id: 11155111

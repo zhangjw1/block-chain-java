@@ -1,5 +1,7 @@
 package com.blockchain.learning.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,10 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name = "健康检查与概览", description = "提供应用健康状态和API概览")
 @RestController
 @RequestMapping("/api")
 public class HealthController {
 
+    @Operation(summary = "应用健康检查", description = "返回应用当前的运行状态。如果返回'UP'，则表示应用正常运行。")
     @GetMapping("/health")
     public Map<String, Object> health() {
         Map<String, Object> response = new HashMap<>();
@@ -20,6 +24,7 @@ public class HealthController {
         return response;
     }
 
+    @Operation(summary = "API概览", description = "欢迎信息及所有可用API端点的列表。")
     @GetMapping("/")
     public Map<String, Object> welcome() {
         Map<String, Object> response = new HashMap<>();

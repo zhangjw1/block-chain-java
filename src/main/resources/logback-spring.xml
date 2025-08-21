@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 
+                使用Logback内置的replace功能进行脱敏。
+                它会匹配一个正则表达式 (这里是匹配私钥的表达式) 并将其替换为指定的字符串。
+                这是在此项目环境中被验证过可以成功工作的最终方案。
+            -->
+            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'(0x)?[a-fA-F0-9]{64}', '*** MASKED PRIVATE KEY ***'}%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

@@ -38,6 +38,13 @@
             <version>${web3j.version}</version>
         </dependency>
 
+        <!-- API Documentation with SpringDoc -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
         <!-- API Documentation will be added later -->
         <!-- Temporarily removed Springfox due to compatibility issues with Spring Boot 2.7.x -->
 

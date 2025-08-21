@@ -34,7 +34,7 @@ public class WalletService {
     @Value("${blockchain.wallet.storage-path:./wallets}")
     private String walletStoragePath;
 
-    @Value("${blockchain.wallet.encryption-key:default-key}")
+    @Value("${blockchain.wallet.encryption-key:a-16-byte-secret}")
     private String encryptionKey;
 
     private Credentials currentCredentials;

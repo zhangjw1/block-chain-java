@@ -18,7 +18,7 @@ blockchain:
   
   wallet:
     storage-path: "${WALLET_STORAGE_PATH:./wallets}"
-    encryption-key: "${WALLET_ENCRYPTION_KEY:default-key}"
+    encryption-key: "${WALLET_ENCRYPTION_KEY:a-16-byte-secret}"
   
   contract:
     gas-limit: 4700000

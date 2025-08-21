@@ -54,6 +54,62 @@ public class WalletController {
     }
 
     /**
+     * 创建带助记词的新钱包
+     * 
+     * @return 新创建的钱包信息，包含助记词（请妥善保管）
+     */
+    @PostMapping("/create-with-mnemonic")
+    public ResponseEntity<WalletInfo> createWalletWithMnemonic() {
+        try {
+            logger.info("Creating new wallet with mnemonic via API");
+            WalletInfo walletInfo = walletService.createWalletWithMnemonic();
+            logger.info("Wallet with mnemonic created successfully: {}", walletInfo.getAddress());
+            return ResponseEntity.ok(walletInfo);
+        } catch (WalletException e) {
+            logger.error("Error creating wallet with mnemonic: {}", e.getMessage());
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    /**
+     * 通过助记词导入钱包
+     * 
+     * @param request 包含助记词的请求体
+     * @return 导入的钱包信息
+     */
+    @PostMapping("/import-from-mnemonic")
+    public ResponseEntity<Map<String, Object>> importWalletFromMnemonic(@RequestBody Map<String, String> request) {
+        try {
+            String mnemonic = request.get("mnemonic");
+
+            if (mnemonic == null || mnemonic.trim().isEmpty()) {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Mnemonic phrase is required");
+                errorResponse.put("success", false);
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
+            logger.info("Importing wallet from mnemonic via API");
+            WalletInfo walletInfo = walletService.importWalletFromMnemonic(mnemonic);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("wallet", walletInfo);
+            response.put("message", "Wallet imported successfully from mnemonic");
+
+            logger.info("Wallet imported successfully from mnemonic: {}", walletInfo.getAddress());
+            return ResponseEntity.ok(response);
+
+        } catch (WalletException e) {
+            logger.error("Error importing wallet from mnemonic: {}", e.getMessage());
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            errorResponse.put("success", false);
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
+    /**
      * 导入EOA钱包
      * 
      * 通过提供的私钥导入现有的EOA账户。

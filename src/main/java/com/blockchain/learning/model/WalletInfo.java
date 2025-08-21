@@ -29,6 +29,9 @@ public class WalletInfo {
     /** 标识钱包是否为导入的（true：导入，false：新创建） */
     private boolean isImported;
 
+    /** 助记词（12个单词的字符串表示，用于恢复钱包） */
+    private String mnemonic;
+
     /**
      * 默认构造函数
      */
@@ -139,6 +142,24 @@ public class WalletInfo {
      */
     public void setImported(boolean imported) {
         isImported = imported;
+    }
+
+    /**
+     * 获取助记词
+     * 
+     * @return 12个单词的助记词字符串
+     */
+    public String getMnemonic() {
+        return mnemonic;
+    }
+
+    /**
+     * 设置助记词
+     * 
+     * @param mnemonic 12个单词的助记词字符串
+     */
+    public void setMnemonic(String mnemonic) {
+        this.mnemonic = mnemonic;
     }
 
     @Override

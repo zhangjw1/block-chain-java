@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.Keys;
-import org.web3j.crypto.WalletUtils;
+import org.web3j.crypto.*;
 import org.web3j.utils.Convert;
 
 import javax.crypto.Cipher;
@@ -20,6 +17,7 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
@@ -284,6 +282,80 @@ public class WalletService {
         } catch (Exception e) {
             logger.error("Error loading wallet: {}", e.getMessage());
             throw new WalletException("Failed to load wallet", e);
+        }
+    }
+
+    /**
+     * 通过生成新的助记词来创建钱包
+     */
+    public WalletInfo createWalletWithMnemonic() {
+        try {
+            logger.info("Creating new wallet with mnemonic...");
+            SecureRandom secureRandom = new SecureRandom();
+            byte[] entropy = new byte[16]; // 128 bits = 12 words
+            secureRandom.nextBytes(entropy);
+
+            String mnemonic = MnemonicUtils.generateMnemonic(entropy);
+            Credentials credentials = WalletUtils.loadBip39Credentials("", mnemonic);
+
+            String address = credentials.getAddress();
+            logger.info("Generated new wallet with mnemonic for address: {}", address);
+
+            savePrivateKey(address, credentials.getEcKeyPair().getPrivateKey());
+            this.currentCredentials = credentials;
+
+            BigInteger balance = getWalletBalance(address);
+            String balanceInEth = Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
+
+            WalletInfo walletInfo = new WalletInfo(address, balance, balanceInEth, LocalDateTime.now());
+            walletInfo.setImported(false);
+            walletInfo.setMnemonic(mnemonic); // Only set mnemonic on creation
+
+            logger.info("Wallet created successfully with mnemonic for address: {}", address);
+            return walletInfo;
+
+        } catch (Exception e) {
+            logger.error("Error creating wallet with mnemonic: {}", e.getMessage(), e);
+            throw new WalletException("Failed to create wallet with mnemonic", e);
+        }
+    }
+
+    /**
+     * 从助记词导入或加载钱包。
+     * 如果钱包已存在本地，则加载它（登录）。
+     * 如果不存在，则导入并保存（首次导入）。
+     */
+    public WalletInfo importWalletFromMnemonic(String mnemonic) {
+        try {
+            if (!MnemonicUtils.validateMnemonic(mnemonic)) {
+                throw new WalletException("Invalid mnemonic phrase");
+            }
+
+            Credentials credentials = WalletUtils.loadBip39Credentials("", mnemonic);
+            String address = credentials.getAddress();
+
+            Path walletFile = Paths.get(walletStoragePath, address + ".wallet");
+            if (Files.exists(walletFile)) {
+                logger.info("Wallet for address {} already exists. Loading it...", address);
+                return loadWallet(address);
+            }
+
+            logger.info("Importing new wallet from mnemonic for address: {}", address);
+            savePrivateKey(address, credentials.getEcKeyPair().getPrivateKey());
+            this.currentCredentials = credentials;
+
+            BigInteger balance = getWalletBalance(address);
+            String balanceInEth = Convert.fromWei(balance.toString(), Convert.Unit.ETHER).toString();
+
+            WalletInfo walletInfo = new WalletInfo(address, balance, balanceInEth, LocalDateTime.now());
+            walletInfo.setImported(true);
+
+            logger.info("Wallet imported successfully from mnemonic for address: {}", address);
+            return walletInfo;
+
+        } catch (Exception e) {
+            logger.error("Error importing wallet from mnemonic: {}", e.getMessage());
+            throw new WalletException("Failed to import wallet from mnemonic: " + e.getMessage(), e);
         }
     }
 }

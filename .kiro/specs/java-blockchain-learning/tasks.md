@@ -108,3 +108,30 @@
   - 添加示例配置文件和环境变量说明
   - 进行端到端集成测试
   - _需求: 5.1, 5.2, 5.3, 5.4, 5.5_
+
+# 新功能 (V2)
+
+- [ ] 13. **集成区块链浏览器API，实现交易历史查询**
+  - [ ] 研究并选择一个区块链浏览器API (如 Etherscan, BscScan等)。
+  - [ ] 在 `application.yml` 中添加浏览器API Key的配置项。
+  - [ ] 创建 `ExplorerService` 用于封装对浏览器API的HTTP请求。
+  - [ ] 创建 `ExplorerController` 并添加 `/api/explorer/txlist/{address}` 端点来查询和返回交易历史。
+  - [ ] 编写新服务的单元测试。
+  - _需求: 2 (用户故事)_
+
+- [ ] 14. **实现NFT (ERC-721) 交互功能**
+  - [ ] 在 `src/main/resources/contracts` 目录下添加一个标准的 `ERC721.sol` 接口文件。
+  - [ ] 使用 `mvn web3j:generate-sources` 命令为ERC-721生成Java包装类。
+  - [ ] 在 `ContractService` 中添加 `getNftOwner(contractAddress, tokenId)` 方法。
+  - [ ] 在 `ContractService` 中添加 `getNftTokenURI(contractAddress, tokenId)` 方法。
+  - [ ] (可选) 在 `ContractService` 中添加 `transferNft(...)` 方法。
+  - [ ] 在 `ContractController` 中添加对应的API接口来暴露NFT查询和转移功能。
+  - [ ] 编写NFT相关功能的集成测试。
+  - _需求: 3 (用户故事)_
+
+- [ ] 15. **实现合约事件监听**
+  - [ ] 研究并确定用于事件监听的 WebSocket 节点 (e.g., Infura WSS endpoint)。
+  - [ ] 修改 `Web3Config` 以支持 WebSocket 连接。
+  - [ ] 创建 `EventListeningService` 用于订阅和处理 `SimpleStorage` 合约的 `DataStored` 事件。
+  - [ ] (可选) 添加一个简单的接口或日志来展示接收到的事件。
+  - _需求: 4 (用户故事)_

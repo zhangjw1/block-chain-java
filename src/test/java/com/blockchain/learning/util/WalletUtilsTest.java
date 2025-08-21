@@ -87,12 +87,12 @@ class WalletUtilsTest {
         assertTrue(checksumAddress.startsWith("0x"));
 
         // Test with invalid address, expecting an exception
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             WalletUtils.toChecksumAddress("invalid-address");
         });
 
         // Test with another invalid address (wrong length)
-        assertThrows(RuntimeException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             WalletUtils.toChecksumAddress("0x742d35cc6634c0532925a3b8d4c9db96c4b4d8b");
         });
     }

@@ -10,7 +10,7 @@ spring:
 
 blockchain:
   infura:
-    project-id: "${INFURA_PROJECT_ID:31c8cb15e8b04abdab33cb953b75c014}"
+    project-id: "${INFURA_PROJECT_ID:YOUR_ID}"
   network:
     name: "sepolia"
     chain-id: 11155111
@@ -33,4 +33,4 @@ logging:
 explorer:
   api:
     url: "https://api-sepolia.etherscan.io/api"
-    key: "${ETHERSCAN_API_KEY:FZPVVHPKSCP2MXA1VIXVGYSDNQ5Y8SIMH6}"
+    key: "${ETHERSCAN_API_KEY:XX2615RJXVUKZIVKSAMGQDADWCM2N6FNQB}"

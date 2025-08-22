@@ -12,22 +12,11 @@ public class WalletUtils {
             return false;
         }
         
-        try {
-            // 移除0x前缀进行验证
-            String cleanAddress = address.startsWith("0x") ? address.substring(2) : address;
-            
-            // 检查长度（40个十六进制字符）
-            if (cleanAddress.length() != 40) {
-                return false;
-            }
-            
-            // 检查是否为有效的十六进制字符
-            Long.parseLong(cleanAddress, 16);
-            
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        // 移除0x前缀进行验证
+        String cleanAddress = address.startsWith("0x") ? address.substring(2) : address;
+
+        // 长度与十六进制内容校验
+        return cleanAddress.matches("^[0-9a-fA-F]{40}$");
     }
 
     /**

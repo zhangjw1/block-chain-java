@@ -357,4 +357,39 @@ public class WalletController {
         response.put("timestamp", System.currentTimeMillis());
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * 导出指定地址的明文私钥（十六进制，不带0x）。
+     * 安全提示：该接口敏感，必须在受信网络与权限下使用。
+     *
+     * @param address 要导出的钱包地址
+     * @return 私钥字符串
+     */
+    @GetMapping("/export-private-key/{address}")
+    public ResponseEntity<Map<String, Object>> exportPrivateKey(@PathVariable String address) {
+        try {
+            if (!WalletUtils.isValidAddress(address)) {
+                Map<String, Object> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid address format");
+                errorResponse.put("success", false);
+                return ResponseEntity.badRequest().body(errorResponse);
+            }
+
+            logger.info("Exporting private key for address: {}", address);
+            String privateKeyHex = walletService.exportPrivateKeyHex(address);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("address", WalletUtils.formatAddress(address));
+            response.put("privateKeyHex", privateKeyHex);
+
+            return ResponseEntity.ok(response);
+        } catch (WalletException e) {
+            logger.error("Error exporting private key: {}", e.getMessage());
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            errorResponse.put("success", false);
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
 }

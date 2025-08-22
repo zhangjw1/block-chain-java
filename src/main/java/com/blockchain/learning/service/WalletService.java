@@ -286,6 +286,26 @@ public class WalletService {
     }
 
     /**
+     * 导出指定地址对应的明文私钥（十六进制，不带0x前缀）。
+     * 读取 wallets 目录下的加密文件，解密后返回。
+     */
+    public String exportPrivateKeyHex(String address) {
+        try {
+            Path walletFile = Paths.get(walletStoragePath, address + ".wallet");
+            if (!Files.exists(walletFile)) {
+                throw new WalletException("Wallet file not found for address: " + address);
+            }
+
+            String encryptedPrivateKey = new String(Files.readAllBytes(walletFile));
+            String privateKeyHex = decryptPrivateKey(encryptedPrivateKey);
+            return privateKeyHex;
+        } catch (Exception e) {
+            logger.error("Error exporting private key: {}", e.getMessage());
+            throw new WalletException("Failed to export private key", e);
+        }
+    }
+
+    /**
      * 通过生成新的助记词来创建钱包
      */
     public WalletInfo createWalletWithMnemonic() {
